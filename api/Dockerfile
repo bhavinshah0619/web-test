@@ -7,6 +7,7 @@ COPY ./api/package.json /app
 RUN yarn add global typescript
 RUN yarn add global tsc-watch
 RUN yarn add global pg
+RUN yarn add global http-status-codes
 
 RUN yarn
 

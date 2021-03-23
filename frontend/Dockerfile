@@ -6,6 +6,9 @@ WORKDIR /app
 COPY ./frontend /app
 
 RUN yarn add global @vue/cli
+RUN yarn add global vue-template-compiler
+RUN yarn add global vue-material
+RUN yarn add global vuelidate
 RUN yarn
 
 
