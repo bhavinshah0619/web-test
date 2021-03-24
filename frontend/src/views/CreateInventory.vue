@@ -7,7 +7,7 @@
       </md-card-header>
       <md-card-content>
         <div class="md-layout md-gutter">
-          <div class="md-layout-item md-size-40">
+          <div class="md-layout-item md-size-30">
             <md-datepicker v-model="form.selectedDate">
               <label>Select date</label>
               <span class="md-error" v-if="!$v.form.selectedDate.required">The date is required</span>
@@ -90,7 +90,7 @@
         </div>
         <md-divider></md-divider>
 
-        <div class="md-layout-item md-size-40">
+        <div class="md-layout-item md-size-20">
           <md-field>
             <label for="capacity">Capacity</label>
             <md-input type="number" id="capacity" v-model="form.capacity" :disabled="submit"></md-input>
@@ -98,16 +98,18 @@
           </md-field>
         </div>
 
-        <div class="md-layout md-gutter">  
-          <md-card-actions>
-            <md-button type="submit" class="md-primary" :disabled="submit">Submit</md-button>
-          </md-card-actions>
+        <md-divider></md-divider>
+
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item md-size-50">
+            <md-card-actions>
+              <md-button type="submit" class="md-raised  md-primary" :disabled="submit">Submit</md-button>
+            </md-card-actions>
+          </div>
         </div>
 
       </md-card-content>
     </md-card>
-
-
   </form>
 </div>
 </template>
@@ -178,7 +180,7 @@ export default {
     validateInput() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.saveGuest();
+        this.saveInventory();
       }
     },
     // 12:00 AM - 1, 12:15 AM - 2, 1:00 AM - 5
@@ -189,7 +191,7 @@ export default {
         return parseInt(hour) * 4 + parseInt(minutes) + ampm * 48;
       }
     },
-    saveGuest() {
+    saveInventory() {
       const startTimeCode = this.calculateTimeCode(this.form.hourBegin, this.form.minutesBegin, this.form.ampmBegin);
       const endTimeCode = this.calculateTimeCode(this.form.hourEnd, this.form.minutesEnd, this.form.ampmEnd);
 
@@ -205,7 +207,7 @@ export default {
           timecodeEnd: endTimeCode,
           capacity: Number(this.form.capacity)
         };
-        axios.post('http://localhost:9090/create-inventory', params)
+        axios.post('http://localhost:9090/inventory/add', params)
         .then((response) => {
           console.log(response);
         }, (error) => {

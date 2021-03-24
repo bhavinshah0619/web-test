@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="md-layout md-gutter">
-          <div class="md-layout-item md-size-40">
+          <div class="md-layout-item md-size-30">
             <md-datepicker v-model="form.selectedDate" :class="getValidationClass('selectedDate')">
               <label>Select date</label>
               <span class="md-error" v-if="!$v.form.selectedDate.required">The date is required</span>
@@ -79,11 +79,15 @@
             <md-radio v-model="form.minutes" value=4>45</md-radio>
           </div>
         </div>
+
         <md-divider></md-divider>
-        <div class="md-layout md-gutter">  
-          <md-card-actions>
-            <md-button type="submit" class="md-primary" :disabled="submit">Submit</md-button>
-          </md-card-actions>
+
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item md-size-50">
+            <md-card-actions>
+              <md-button type="submit" class="md-raised  md-primary" :disabled="submit">Submit</md-button>
+            </md-card-actions>
+          </div>
         </div>
 
       </md-card-content>
@@ -181,7 +185,7 @@ export default {
           date: this.form.selectedDate,
           timecode: code
         };
-        axios.post('http://localhost:9090/add-reservation', params)
+        axios.post('http://localhost:9090/reservation/add', params)
         .then((response) => {
           console.log(response);
         }, (error) => {

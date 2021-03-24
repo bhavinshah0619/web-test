@@ -24,6 +24,8 @@ import {
     @Column
     capacity: number
   
+    @Column 
+    available: number
   
     @CreatedAt
     created_at: string

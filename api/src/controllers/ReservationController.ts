@@ -3,9 +3,9 @@ import { Controller, Get, Post } from '@overnightjs/core'
 import { Request, Response } from 'express'
 import { Reservation } from '../models/Reservation'
 
-@Controller('add-reservation')
+@Controller('reservation')
 export class ReservationController {
-  @Post()
+  @Post('add')
   private add(req: Request, res: Response) {
     console.log(req.body);
     // TODO: Error Checking
