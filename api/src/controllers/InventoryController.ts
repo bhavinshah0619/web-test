@@ -10,8 +10,8 @@ export class InventoryController {
     console.log(req.body);
     // TODO: Error Checking, UI is not enough
     let reqBody = req.body;
-    let start = reqBody.timeCodeBegin;
-    let stop = reqBody.timeCodeEnd;
+    let start = reqBody.timecodeBegin;
+    let stop = reqBody.timecodeEnd;
     if (start > stop) {
         return res.status(StatusCodes.BAD_REQUEST).json({
             Result: 'Failure',
@@ -22,13 +22,21 @@ export class InventoryController {
         let inventoryDerived = {
           capacity: reqBody.capacity,
           date: reqBody.date,
-          timeCode: i
+          timecode: i
         }
+        // Not most ideal way to update. 
+        // TODO: Find a better way to update.
+        Inventory.destroy({
+          where: {
+            date: inventoryDerived.date,
+            timecode: inventoryDerived.timecode
+          }
+        })
         const inventory = new Inventory(inventoryDerived);
         inventory.save();
     }
     return res.status(StatusCodes.OK).json({
-        Result: 'Success',
+        Result: 'Success'
     });
   }
 }

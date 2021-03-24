@@ -179,7 +179,7 @@ export default {
           email: this.form.email,
           size: this.form.partySize,
           date: this.form.selectedDate,
-          timeCode: code
+          timecode: code
         };
         axios.post('http://localhost:9090/add-reservation', params)
         .then((response) => {

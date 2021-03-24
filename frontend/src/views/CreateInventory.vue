@@ -176,7 +176,6 @@ export default {
       }
     },
     validateInput() {
-      debugger;
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.saveGuest();
@@ -202,8 +201,8 @@ export default {
       try {
         const params = {
           date: this.form.selectedDate,
-          timeCodeBegin: startTimeCode,
-          timeCodeEnd: endTimeCode,
+          timecodeBegin: startTimeCode,
+          timecodeEnd: endTimeCode,
           capacity: Number(this.form.capacity)
         };
         axios.post('http://localhost:9090/create-inventory', params)

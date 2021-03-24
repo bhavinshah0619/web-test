@@ -3,6 +3,7 @@ import {
     CreatedAt,
     DeletedAt,
     Model,
+    Index,
     PrimaryKey, Table,
     UpdatedAt
   } from 'sequelize-typescript'
@@ -13,17 +14,16 @@ import {
     @Column({ autoIncrement: true })
     id: number
 
+    @Index
     @Column
     date: string
 
     @Column
-    timeCode: number
+    timecode: number
 
     @Column
     capacity: number
   
-    @DeletedAt
-    deleted_at: string
   
     @CreatedAt
     created_at: string

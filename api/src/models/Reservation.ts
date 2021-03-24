@@ -4,7 +4,7 @@ import {
     DeletedAt,
     Model,
     PrimaryKey, Table,
-    UpdatedAt
+    UpdatedAt,
   } from 'sequelize-typescript'
   
   @Table({ tableName: 'reservations' })
@@ -26,7 +26,7 @@ import {
     date: string
 
     @Column
-    timeCode: number
+    timecode: number
   
     @DeletedAt
     deleted_at: string
