@@ -73,10 +73,10 @@
             <div>
               <label>Minutes</label>
             </div>
-            <md-radio v-model="form.minutes" value=1>00</md-radio>
-            <md-radio v-model="form.minutes" value=2>15</md-radio>
-            <md-radio v-model="form.minutes" value=3>30</md-radio>
-            <md-radio v-model="form.minutes" value=4>45</md-radio>
+            <md-radio v-model="form.minutes" value=1 :disabled=checkAvailability(1)>00</md-radio>
+            <md-radio v-model="form.minutes" value=2 :disabled=checkAvailability(2)>15</md-radio>
+            <md-radio v-model="form.minutes" value=3 :disabled=checkAvailability(3)>30</md-radio>
+            <md-radio v-model="form.minutes" value=4 :disabled=checkAvailability(4)>45</md-radio>
           </div>
         </div>
 
@@ -121,6 +121,7 @@ export default {
         },
         submit: false,
         guestCountSelected: 1,
+        availabilityMap: new Map(),
         guestCounts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     }
   },
@@ -156,22 +157,36 @@ export default {
       }
     },
     validateInput() {
-      this.calculateTimeCode();
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.saveGuest();
       }
     },
+
     // 12:00 AM - 1, 12:15 AM - 2, 1:00 AM - 5
     // 12:00 PM - 49
     // Afternoon offset - 48
-    calculateTimeCode() {
-      if ((this.form.hour !== null) && (this.form.minutes !== null) && (this.form.ampm !== null)) {
-        return parseInt(this.form.hour) * 4 + parseInt(this.form.minutes) + this.form.ampm * 48;
+    calculateTimeCode(hour, minutes, ampm) {
+      if ((hour !== null) && (minutes !== null) && (ampm!== null)) {
+        return parseInt(hour) * 4 + parseInt(minutes) + ampm * 48;
       }
     },
+
+    checkAvailability(min) {
+      if (this.form.hour && this.form.ampm) { 
+        const code = this.calculateTimeCode(this.form.hour, min, this.form.ampm);
+        const available = this.availabilityMap.get(code);
+        if (available > 0)
+          return false;
+        else 
+          return true;
+      } else {
+        return true;
+      }
+    },
+
     saveGuest() {
-      const code = this.calculateTimeCode();
+      const code = this.calculateTimeCode(this.form.hour, this.form.minutes, this.form.ampm);
       if (code === -1) {
         // TODO Give some indication to User
         console.log("Should not happen.");
@@ -197,9 +212,45 @@ export default {
     }
   },
 
+  // TODO: May be call everytime we change the hour or min?
+  updateMap() {
+    try {
+      const params = {
+        date: this.form.selectedDate
+      };
+      axios.post('http://localhost:9090/inventory/querybyDate', params)
+      .then((response) => {
+        this.availability = response;
+        if (response && response.data.all) {
+          response.data.all.forEach((availObj) => {
+            this.availabilityMap.set(availObj.timecode, availObj.available);
+          });
+        }
+      }, (error) => {
+        console.log(error);
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  },
+
+  // Currently getting the count everytime we land the page.
   async mounted() {
     try {
-      await axios.get('http://localhost:9090/test')
+      const params = {
+        date: this.form.selectedDate
+      };
+      axios.post('http://localhost:9090/inventory/querybyDate', params)
+      .then((response) => {
+        this.availability = response;
+        if (response && response.data.all) {
+          response.data.all.forEach((availObj) => {
+            this.availabilityMap.set(availObj.timecode, availObj.available);
+          });
+        }
+      }, (error) => {
+        console.log(error);
+      })
     } catch (error) {
       console.error(error)
     }

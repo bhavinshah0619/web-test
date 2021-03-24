@@ -67,6 +67,20 @@ export class InventoryController {
     return res.status(StatusCodes.OK).json({
       Result: 'Success',
       sum: sum
-  });
+    });
+  }
+
+  @Post('querybyDate')
+  private async getAll(req: Request, res: Response) {
+    let reqBody = req.body;
+    const allRec = await Inventory.findAll({
+      where: {
+        date: reqBody.date
+      }
+    });
+    return res.status(StatusCodes.OK).json({
+      Result: 'Success',
+      all: allRec
+    });
   }
 }
