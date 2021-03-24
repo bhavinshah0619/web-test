@@ -15,13 +15,22 @@ const routes: Array<RouteConfig> = [
     component: Reservations
   },
   {
-    path: '/inventory',
-    name: 'Inventory',
+    path: '/create-inventory',
+    name: 'Create Inventory',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Inventory.vue')
+      import(/* webpackChunkName: "about" */ '../views/CreateInventory.vue')
+  },
+  {
+    path: '/view-inventory',
+    name: 'View Inventory',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/ViewInventory.vue')
   }
 ]
 

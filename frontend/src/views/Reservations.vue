@@ -73,10 +73,10 @@
             <div>
               <label>Minutes</label>
             </div>
-            <md-radio v-model="form.mininutes" value=1>00</md-radio>
-            <md-radio v-model="form.mininutes" value=2>15</md-radio>
-            <md-radio v-model="form.mininutes" value=3>30</md-radio>
-            <md-radio v-model="form.mininutes" value=4>45</md-radio>
+            <md-radio v-model="form.minutes" value=1>00</md-radio>
+            <md-radio v-model="form.minutes" value=2>15</md-radio>
+            <md-radio v-model="form.minutes" value=3>30</md-radio>
+            <md-radio v-model="form.minutes" value=4>45</md-radio>
           </div>
         </div>
         <md-divider></md-divider>
@@ -95,12 +95,8 @@
 <script>
 import axios from 'axios'
 import { validationMixin } from 'vuelidate'
-import {
-  required,
-  email,
-  minLength,
-  maxLength
-} from 'vuelidate/lib/validators'
+import { required, email, minLength, maxLength } from 'vuelidate/lib/validators'
+import format from 'date-fns/format'
 
 export default {
   name: 'Reservations',
@@ -113,14 +109,13 @@ export default {
           name: null,
           email: null,
           partySize: null,
-          selectedDate: now,
+          selectedDate: format(now, 'yyyy-MM-dd'),
           hour: null,
-          mininutes: null,
+          minutes: null,
           ampm: null,
           time: null
         },
         submit: false,
-        movie: null,
         guestCountSelected: 1,
         guestCounts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     }
@@ -142,7 +137,7 @@ export default {
       ampm: {
         required
       },
-      mininutes: {
+      minutes: {
         required
       }
     }
@@ -167,15 +162,15 @@ export default {
     // 12:00 PM - 49
     // Afternoon offset - 48
     calculateTimeCode() {
-      if ((this.form.hour !== null) && (this.form.mininutes !== null) && (this.form.ampm !== null)) {
-        return parseInt(this.form.hour) * 4 + parseInt(this.form.mininutes) + this.form.ampm * 48;
+      if ((this.form.hour !== null) && (this.form.minutes !== null) && (this.form.ampm !== null)) {
+        return parseInt(this.form.hour) * 4 + parseInt(this.form.minutes) + this.form.ampm * 48;
       }
     },
     saveGuest() {
       const code = this.calculateTimeCode();
       if (code === -1) {
         // TODO Give some indication to User
-        console.log("Should not happen");
+        console.log("Should not happen.");
         return;
       }
       try {

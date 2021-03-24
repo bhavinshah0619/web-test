@@ -9,6 +9,7 @@ RUN yarn add global @vue/cli
 RUN yarn add global vue-template-compiler
 RUN yarn add global vue-material
 RUN yarn add global vuelidate
+RUN yarn add global date-fns
 RUN yarn
 
 
